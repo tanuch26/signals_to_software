@@ -2,7 +2,6 @@ import os
 import gc
 import glob
 import pickle
-import zipfile
 import requests
 import urllib.request  # <--- NEW: Allows us to download files directly!
 import numpy as np
@@ -21,7 +20,7 @@ st.set_page_config(page_title="EE200 Song Identifier", layout="wide")
 def load_database():
     db_name = "song_db.pkl"
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    zip_name = os.path.join(base_dir,"song_db.zip")
+    pkl_name = os.path.join(base_dir,"song_db.pkl")
    
     # 1. LOCAL TESTING: Try to load the .pkl normally (for when you run on your laptop)
     for root, dirs, files in os.walk(base_dir):
@@ -37,13 +36,13 @@ def load_database():
 
     # 2. CLOUD DEPLOYMENT: Download the real zip directly from your GitHub Release
     # ---> PASTE YOUR LINK BETWEEN THE QUOTES BELOW <---
-    url = "https://github.com/Orthodox112/Song-Identifier/releases/download/v1.0/song_db.zip" 
+    url = "https://github.com/tanuch26/signals_to_software/releases/download/v1.0/song_db.pkl" 
         
     try:
         # This downloads the file to the Streamlit server
         r = requests.get(url)
         r.raise_for_status()
-        with open(zip_name,"wb") as f:
+        with open(pkl_name,"wb") as f:
             f.write(r.content)
     except Exception as e:
         return {}, [
@@ -54,17 +53,14 @@ def load_database():
 
     # 3. Read the database directly from the downloaded ZIP in Memory
     try:
-        with zipfile.ZipFile(zip_name, 'r') as zip_ref:
-            for file_inside_zip in zip_ref.namelist():
-                if file_inside_zip.endswith('.pkl'):
-                    with zip_ref.open(file_inside_zip) as f:
-                        data = pickle.load(f)
-                        if isinstance(data, dict):
-                            return data, []
-    except Exception as e:
-        return {}, [f"Extraction Error: {type(e).__name__} - {e}"]
-    
-    return {}, ["Failed to find a valid dictionary inside the downloaded zip."]
+    with open(pkl_name, "rb") as f:
+        data = pickle.load(f)
+        if isinstance(data, dict):
+            return data, []
+except Exception as e:
+    return {}, [f"Loading Error: {type(e).__name__} - {e}"]
+
+return {}, ["Failed to load the database."]
 
 # Safely initialize the global database
 # song_db, debug_info = load_database()
