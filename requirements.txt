@@ -1,13 +1,9 @@
 streamlit
-numpy
+numpy<2.0
 scipy
 matplotlib
-librosa
+librosa==0.10.2.post1
 soundfile
 audioread
 requests
-decorator
-lazy_loader
-msgpack
-pooch
 scikit-learn
