@@ -47,7 +47,7 @@ def load_database():
     except Exception as e:
         return {}, [
     f"URL: {url}",
-    f"Exists: {os.path.exists(zip_name)}",
+    f"Exists: {os.path.exists(pkl_name)}",
     f"Download Error: {repr(e)}"
     ]
 
