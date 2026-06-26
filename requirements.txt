@@ -2,7 +2,7 @@ streamlit
 numpy
 scipy
 matplotlib
-librosa==0.10.1
+librosa
 soundfile
 audioread
 requests
