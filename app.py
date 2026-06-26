@@ -53,14 +53,14 @@ def load_database():
 
     # 3. Read the database directly from the downloaded ZIP in Memory
     try:
-    with open(pkl_name, "rb") as f:
-        data = pickle.load(f)
-        if isinstance(data, dict):
-            return data, []
-except Exception as e:
-    return {}, [f"Loading Error: {type(e).__name__} - {e}"]
+        with open(pkl_name, "rb") as f:
+            data = pickle.load(f)
+            if isinstance(data, dict):
+                return data, []
+    except Exception as e:
+        return {}, [f"Loading Error: {type(e).__name__} - {e}"]
 
-return {}, ["Failed to load the database."]
+    return {}, ["Failed to load the database."]
 
 # Safely initialize the global database
 # song_db, debug_info = load_database()
